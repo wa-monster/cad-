@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./Proj4.js"></script>
+  </head>
+  <body>
+    <script>
+      var arr = proj4(
+        "+proj=utm +zone=48 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ",
+        "+proj=longlat +datum=WGS84 +no_defs",
+        [2351.6443 + 647217.1457, 2547.7958 + 3254036.6942]
+        // [649512.9, 3256570.12]
+      );
+      console.log("arr", arr);
+      const arr1b = [649568.79, 3256584.49];
+      const arrcrv = [2351.6443, 2547.7958];
+      const arrcrv2 = [2351.6346, 2547.7958];
+      const arrres = [647217.1457, 3254036.6942];
+    </script>
+  </body>
+</html>

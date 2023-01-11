@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="initial-scale=1.0, user-scalable=no, width=device-width"
+    />
+    <link
+      rel="stylesheet"
+      href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"
+    />
+    <style>
+      html,
+      body,
+      #container {
+        width: 100%;
+        height: 100%;
+      }
+
+      #map-zoom,
+      #map-center {
+        color: #0288d1;
+      }
+    </style>
+    <title>地图级别与中心点</title>
+  </head>
+
+  <body>
+    <div id="container"></div>
+    <div class="info">
+      <h4>获取地图级别与中心点坐标</h4>
+      <p>当前级别：<span id="map-zoom">11</span></p>
+      <p>当前中心点：<span id="map-center">121.498586,31.239637</span></p>
+    </div>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=5e13acb59363902630ab37624d412d1b"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script>
+      //初始化地图
+      var map = new AMap.Map("container", {
+        zoom: 11, //初始地图级别
+        center: [116.45, 39.8], //初始地图中心点
+      });
+
+      //显示地图层级与中心点信息
+      function logMapinfo() {
+        var zoom = map.getZoom(); //获取当前地图级别
+        var center = map.getCenter(); //获取当前地图中心位置
+
+        document.querySelector("#map-zoom").innerText = zoom;
+        document.querySelector("#map-center").innerText = center.toString();
+      }
+
+      //绑定地图移动与缩放事件
+      map.on("moveend", logMapinfo);
+      map.on("zoomend", logMapinfo);
+
+      // 创建一个 Marker 实例：
+      var marker = new AMap.Marker({
+        position: new AMap.LngLat(116.39, 39.9), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+        title: "北京",
+      });
+
+      // 将创建的点标记添加到已有的地图实例：
+      map.add(marker);
+      function clickHandler() {
+        console.log("111111111");
+        const arr = [
+          [116.395, 39.8],
+          [116.385, 39.9],
+          [116.385, 39.78],
+          [116.379, 39.99],
+        ];
+        arr.forEach(function (v, i) {
+          // 创建一个 Marker 实例：
+          var marker = new AMap.Marker({
+            position: new AMap.LngLat(v[0], v[1]), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            title: "北京" + i,
+          });
+
+          // 将创建的点标记添加到已有的地图实例：
+          map.add(marker);
+        });
+      }
+      // 绑定事件
+      marker.on("click", clickHandler);
+      AMap.plugin("AMap.Geolocation", function () {
+        var geolocation = new AMap.Geolocation({
+          // 是否使用高精度定位，默认：true
+          enableHighAccuracy: true,
+          // 设置定位超时时间，默认：无穷大
+          timeout: 10000,
+          // 定位按钮的停靠位置的偏移量
+          offset: [10, 20],
+          //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+          zoomToAccuracy: true,
+          //  定位按钮的排放位置,  RB表示右下
+          position: "RB",
+        });
+
+        geolocation.getCurrentPosition(function (status, result) {
+          if (status == "complete") {
+            onComplete(result);
+          } else {
+            onError(result);
+          }
+        });
+
+        function onComplete(data) {
+          // data是具体的定位信息
+          console.log("data", data);
+          var marker = new AMap.Marker({
+            position: new AMap.LngLat(data.position.lng, data.position.lat), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            title: "我",
+          });
+
+          // 将创建的点标记添加到已有的地图实例：
+          map.add(marker);
+        }
+
+        function onError(data) {
+          // 定位出错
+        }
+      });
+    </script>
+  </body>
+</html>
